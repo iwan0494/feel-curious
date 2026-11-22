@@ -10,5 +10,16 @@ const ENTRY_TEXT =
 const OUTPUT_DIR = "/output";
 const OUTPUT_FILE = join(OUTPUT_DIR, "entry.txt");
 
+// Guard: the entry must be a short text of 1-280 Unicode code points.
+// Count code points (not UTF-16 code units) so non-ASCII characters
+// are measured the way the judge counts them. Fail loudly instead of
+// writing an out-of-range entry.
+const ENTRY_LENGTH = [...ENTRY_TEXT].length;
+if (ENTRY_LENGTH < 1 || ENTRY_LENGTH > 280) {
+  throw new Error(
+    `ENTRY_TEXT must be 1-280 characters, got ${ENTRY_LENGTH}`,
+  );
+}
+
 mkdirSync(OUTPUT_DIR, { recursive: true });
 writeFileSync(OUTPUT_FILE, ENTRY_TEXT, "utf8");
